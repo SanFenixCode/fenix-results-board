@@ -66,7 +66,7 @@
   <label><input id="practice" type="checkbox"> Practice mode</label>
 </header>
 <div id="banner"></div>
-<div id="practiceNote">Practice mode: civicAPI sends made-up numbers for every race, so you can see what alerts look like. Slack messages say PRACTICE. Turn it off before the show.</div>
+<div id="practiceNote">Practice mode: civicAPI sends made-up numbers for every race, so you can see what alerts look like. Only the first 3 go to Slack, marked PRACTICE. Turn it off before the show.</div>
 <main>
   <section>
     <h2>OUR RACES</h2>
@@ -127,7 +127,7 @@ for (const r of races) st[r.slug] = { data: null, nextAt: 0, checkedAt: 0 };
 let running = false, timer = null, busy = false, fails = 0, outageSent = false;
 let practice = false;
 let announced = store.get('watcher-announced', {});  // slug -> winner name, so a reload doesn't repeat calls
-let practiceAnnounced = {};
+let practiceAnnounced = {}, practiceSent = 0;  // practice only sends the first few calls to Slack, not all of them
 const seen = () => practice ? practiceAnnounced : announced;
 
 // Which board side a civicAPI candidate is on.
@@ -247,7 +247,7 @@ function alertAll(text, kind) {
   li.innerHTML = `<div class="t">${new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' })}</div>${esc(text)}`;
   $('log').prepend(li);
   if ($('sound').checked) chime(kind === 'warn' ? 330 : 880);
-  slack(text);
+  if (!practice || practiceSent++ < 3) slack(text);
 }
 
 function slack(text) {
@@ -316,7 +316,7 @@ $('testSlack').onclick = () => {
 };
 $('practice').onchange = () => {
   const wasRunning = running; stop();
-  practice = $('practice').checked; practiceAnnounced = {};
+  practice = $('practice').checked; practiceAnnounced = {}; practiceSent = 0;
   for (const r of races) st[r.slug] = { data: null, nextAt: 0, checkedAt: 0 };
   $('practiceNote').classList.toggle('show', practice);
   draw();
