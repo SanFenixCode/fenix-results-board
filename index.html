@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Fenix Results Board</title>
+<link rel="stylesheet" href="fonts.css">
+<script src="races.js"></script>
+<style>
+  :root {
+    --bg: #0b0f1e; --panel: #141a2e; --line: #262e4a; --text: #e8ecf6; --muted: #8b94b0;
+    --blue: #2a5fd6; --blue-dk: #0c2878; --red: #d6222c; --red-dk: #960e1a; --ok: #2fbf71;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.4 system-ui, -apple-system, 'Segoe UI', sans-serif; }
+  header { display: flex; gap: 12px; align-items: center; padding: 14px 20px; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: var(--bg); z-index: 5; }
+  header h1 { font: 22px 'Inter Black', sans-serif; margin: 0 12px 0 0; letter-spacing: .03em; }
+  button { font: inherit; color: var(--text); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 8px 14px; cursor: pointer; }
+  button:hover { border-color: #4a5680; }
+  button.primary { background: var(--blue); border-color: var(--blue); font-weight: 600; }
+  kbd { font: 12px ui-monospace, monospace; border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; color: var(--muted); }
+  .spacer { flex: 1; }
+  #link { font-size: 13px; color: var(--muted); }
+  #link.on { color: var(--ok); }
+
+  main { display: grid; grid-template-columns: minmax(0, 1fr) 560px; gap: 20px; padding: 20px; }
+  @media (max-width: 1200px) { main { grid-template-columns: 1fr; } }
+
+  .search { position: relative; margin-bottom: 18px; }
+  #q { width: 100%; font-size: 22px; padding: 14px 16px; border-radius: 10px; border: 2px solid var(--line); background: var(--panel); color: var(--text); outline: none; }
+  #q:focus { border-color: var(--blue); }
+  #sugg { list-style: none; margin: 6px 0 0; padding: 0; position: absolute; left: 0; right: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; z-index: 4; }
+  #sugg:empty { display: none; }
+  #sugg li { padding: 10px 16px; cursor: pointer; display: flex; gap: 10px; align-items: center; }
+  #sugg li.sel { background: #1f2847; }
+  #sugg .what { color: var(--muted); font-size: 13px; margin-left: auto; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+  .dot.dem { background: var(--blue); } .dot.gop { background: var(--red); } .dot.race { background: #fff; }
+  .hint { color: var(--muted); font-size: 13px; margin-top: 8px; }
+
+  #filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  #filters button { padding: 6px 12px; font-size: 13px; border-radius: 999px; }
+  #filters button.on { background: #fff; color: var(--bg); border-color: #fff; font-weight: 600; }
+  .group { margin-bottom: 22px; }
+  .group h2 { font: 15px 'Inter Black', sans-serif; letter-spacing: .06em; margin: 0 0 10px; display: flex; align-items: center; gap: 10px; }
+  .group h2 .closed { font: 600 11px system-ui, sans-serif; letter-spacing: .04em; color: var(--bg); background: var(--ok); border-radius: 4px; padding: 2px 6px; }
+  .group h2 .count { font: 12px system-ui, sans-serif; color: var(--muted); letter-spacing: 0; }
+  /* Race-type colors (deliberately not red or blue): Senate purple, Governor green, House amber, Local grey */
+  .card.SEN { --type: #a77bff; } .card.GOV { --type: #2fc48d; } .card.HOUSE { --type: #f2a93b; } .card.OTHER { --type: #a3a9b8; } .card.MEASURE { --type: #3cc8d8; }
+  .card.MEASURE .cand.dem { border-color: #0a703e; } .card.MEASURE .cand.gop { border-color: #ba5208; }
+  .card.MEASURE .cand.won.dem { background: #1aa05c; border-color: #1aa05c; } .card.MEASURE .cand.won.gop { background: #e27016; border-color: #e27016; }
+  #grid .card { border-left: 6px solid var(--type, var(--line)); }
+  .otag { font: 800 11px system-ui, sans-serif; letter-spacing: .06em; padding: 3px 7px; border-radius: 4px; background: var(--type); color: #0b0f1e; }
+  #filters button[data-filter="SEN"] { border-color: #a77bff; } #filters button[data-filter="GOV"] { border-color: #2fc48d; }
+  #filters button[data-filter="HOUSE"] { border-color: #f2a93b; } #filters button[data-filter="OTHER"] { border-color: #a3a9b8; } #filters button[data-filter="MEASURE"] { border-color: #3cc8d8; }
+  .card.done { opacity: .6; }
+  .card.done:hover { opacity: 1; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+  .card.live { outline: 2px solid #fff; }
+  .card .top { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .card .state { font: 17px 'Inter Black', sans-serif; letter-spacing: .02em; }
+  .card .held { font-size: 11px; color: var(--muted); }
+  .card .show { margin-left: auto; padding: 5px 10px; font-size: 13px; }
+  .card .cands { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .cand { padding: 9px 8px; text-align: left; border-radius: 8px; border-width: 2px; }
+  .cand.dem { border-color: var(--blue-dk); } .cand.gop { border-color: var(--red-dk); }
+  .cand.dem:hover { border-color: var(--blue); } .cand.gop:hover { border-color: var(--red); }
+  .cand.won.dem { background: var(--blue); border-color: var(--blue); }
+  .cand.won.gop { background: var(--red); border-color: var(--red); }
+  .cand.lost { opacity: .4; }
+  .cand small { display: block; font-size: 11px; opacity: .75; }
+  .card .status { font-size: 12px; color: var(--muted); margin-top: 8px; min-height: 18px; display: flex; gap: 8px; }
+  .card .status a { color: var(--muted); cursor: pointer; text-decoration: underline; margin-left: auto; }
+
+  aside { position: sticky; top: 80px; align-self: start; }
+  .preview { width: 100%; aspect-ratio: 16 / 9; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #000; }
+  .preview iframe { width: 100%; height: 100%; border: 0; display: block; }
+  #onair { margin: 10px 0 14px; font-size: 14px; }
+  #onair b { font-weight: 700; }
+  .help { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .help b { color: var(--text); }
+</style>
+</head>
+<body>
+<header>
+  <h1>RESULTS BOARD</h1>
+  <button class="primary" id="open">Open output tab</button>
+  <span id="link">Output tab not open</span>
+  <span class="spacer"></span>
+  <button id="replay">Replay <kbd>R</kbd></button>
+  <button id="clear">Clear output <kbd>Esc</kbd></button>
+</header>
+<main>
+  <section>
+    <div class="search">
+      <input id="q" placeholder="Type who won (e.g. ossoff) or a state (ga)…" autocomplete="off" spellcheck="false">
+      <ul id="sugg"></ul>
+      <div class="hint">Type a winner's name and press <kbd>Enter</kbd> to call the race and put it on the output. Type a state to show the race without a call. <kbd>/</kbd> jumps back here.</div>
+    </div>
+    <div id="filters"></div>
+    <div id="grid"></div>
+  </section>
+  <aside>
+    <div class="preview"><iframe id="preview" src="output.html" title="Output preview"></iframe></div>
+    <div id="onair">On output: <b>nothing (standby)</b></div>
+    <div class="help">
+      <b>Setup:</b> click <b>Open output tab</b>, then in Riverside share that tab (Share screen → Chrome tab → “Fenix Graphics Output”). Leave it shared all night; switch to the screen-share scene when you want it on air.<br>
+      <b>Calls</b> are saved in this browser, so a refresh keeps them. Click a called candidate again to re-show it; “undo” clears a wrong call.
+    </div>
+  </aside>
+</main>
+<script>
+const RACES = window.RACES || [];
+const POSTAL = { ALABAMA:'AL', ALASKA:'AK', ARIZONA:'AZ', ARKANSAS:'AR', CALIFORNIA:'CA', COLORADO:'CO', CONNECTICUT:'CT', DELAWARE:'DE', FLORIDA:'FL', GEORGIA:'GA', HAWAII:'HI', IDAHO:'ID', ILLINOIS:'IL', INDIANA:'IN', IOWA:'IA', KANSAS:'KS', KENTUCKY:'KY', LOUISIANA:'LA', MAINE:'ME', MARYLAND:'MD', MASSACHUSETTS:'MA', MICHIGAN:'MI', MINNESOTA:'MN', MISSISSIPPI:'MS', MISSOURI:'MO', MONTANA:'MT', NEBRASKA:'NE', NEVADA:'NV', 'NEW HAMPSHIRE':'NH', 'NEW JERSEY':'NJ', 'NEW MEXICO':'NM', 'NEW YORK':'NY', 'NORTH CAROLINA':'NC', 'NORTH DAKOTA':'ND', OHIO:'OH', OKLAHOMA:'OK', OREGON:'OR', PENNSYLVANIA:'PA', 'RHODE ISLAND':'RI', 'SOUTH CAROLINA':'SC', 'SOUTH DAKOTA':'SD', TENNESSEE:'TN', TEXAS:'TX', UTAH:'UT', VERMONT:'VT', VIRGINIA:'VA', WASHINGTON:'WA', 'WEST VIRGINIA':'WV', WISCONSIN:'WI', WYOMING:'WY' };
+const PARTY = { dem: 'Dem', gop: 'GOP' };
+const $ = id => document.getElementById(id);
+
+// ---- saved calls ---------------------------------------------------------
+let calls = {};
+try { calls = JSON.parse(localStorage.getItem('fenix-calls') || '{}'); } catch (_) {}
+const save = () => { try { localStorage.setItem('fenix-calls', JSON.stringify(calls)); } catch (_) {} };
+
+// ---- output windows --------------------------------------------------------
+let outWin = null;
+let live = { slug: null, winner: null };
+const preview = $('preview');
+
+function send(msg) {
+  for (const w of [outWin, preview.contentWindow]) {
+    if (w && !w.closed) try { w.postMessage(msg, '*'); } catch (_) {}
+  }
+}
+function putOnAir(slug, animate) {
+  const winner = calls[slug] ? calls[slug].winner : null;
+  live = { slug, winner };
+  send({ type: 'show', slug, winner, animate });
+  render();
+}
+function clearAir() {
+  live = { slug: null, winner: null };
+  send({ type: 'clear' });
+  render();
+}
+$('open').onclick = () => {
+  outWin = window.open('output.html', 'fenix-graphics-output');
+  if (!outWin) alert('The browser blocked the new tab. Allow pop-ups for this page and click again.');
+  render();
+};
+$('clear').onclick = clearAir;
+$('replay').onclick = () => live.slug && putOnAir(live.slug, true);
+addEventListener('message', e => {
+  if ((e.data || {}).type !== 'output-ready') return;
+  if (e.source !== preview.contentWindow) outWin = e.source;
+  if (live.slug) e.source.postMessage({ type: 'show', slug: live.slug, winner: live.winner, animate: false }, '*');
+  render();
+});
+setInterval(() => { if (outWin && outWin.closed) { outWin = null; render(); } }, 1500);
+
+// ---- calling races ---------------------------------------------------------
+function call(slug, winner) {
+  calls[slug] = { winner, at: Date.now() };
+  save();
+  putOnAir(slug, true);
+}
+function undo(slug) {
+  delete calls[slug];
+  save();
+  if (live.slug === slug) putOnAir(slug, false);
+  else render();
+}
+
+// ---- search ----------------------------------------------------------------
+let sel = 0, matches = [];
+const norm = s => s.toLowerCase().normalize('NFD').replace(/[^a-z0-9 ]/g, '');
+function search(q) {
+  q = norm(q).trim();
+  if (!q) return [];
+  const out = [];
+  for (const r of RACES) {
+    for (const side of isM(r) ? [] : ['dem', 'gop']) {
+      const n = norm(r[side].name), last = n.split(' ').pop();
+      let score = 0;
+      if (last.startsWith(q)) score = 3;
+      else if (n.startsWith(q) || n.split(' ').some(w => w.startsWith(q))) score = 2;
+      else if (q.length >= 3 && n.includes(q)) score = 1;
+      if (score) out.push({ kind: 'cand', race: r, side, score });
+    }
+    const st = norm(r.state), code = (POSTAL[r.state] || '').toLowerCase();
+    const off = norm(r.office), offShort = off.replace(/^(question|proposition|amendment|ballot measure) /, m => m[0]);
+    if (q === code || st.startsWith(q) || r.slug.startsWith(q) || (isM(r) && q.length >= 2 && (off.includes(q) || offShort.replace(' ', '') === q.replace(' ', '')))) out.push({ kind: 'race', race: r, score: q === code ? 4 : 2.5 });
+  }
+  return out.sort((a, b) => b.score - a.score).slice(0, 6);
+}
+function drawSugg() {
+  $('sugg').innerHTML = matches.map((m, i) => m.kind === 'cand'
+    ? `<li data-i="${i}" class="${i === sel ? 'sel' : ''}"><span class="dot ${m.side}"></span>Call <b>${m.race.state}</b> for <b>${m.race[m.side].name}</b><span class="what">${PARTY[m.side]} wins · Enter</span></li>`
+    : `<li data-i="${i}" class="${i === sel ? 'sel' : ''}"><span class="dot race"></span>Show <b>${m.race.state}${isM(m.race) ? ' ' + m.race.office : ''}</b> ${calls[m.race.slug] ? '(as called)' : '(no winner yet)'}<span class="what">Enter</span></li>`).join('');
+}
+function pick(m) {
+  if (!m) return;
+  if (m.kind === 'cand') call(m.race.slug, m.side);
+  else putOnAir(m.race.slug, false);
+  $('q').value = ''; matches = []; drawSugg();
+}
+$('q').addEventListener('input', () => { matches = search($('q').value); sel = 0; drawSugg(); });
+$('q').addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown') { sel = Math.min(sel + 1, matches.length - 1); drawSugg(); e.preventDefault(); }
+  if (e.key === 'ArrowUp') { sel = Math.max(sel - 1, 0); drawSugg(); e.preventDefault(); }
+  if (e.key === 'Enter') pick(matches[sel]);
+  if (e.key === 'Escape') { if ($('q').value) { $('q').value = ''; matches = []; drawSugg(); } else clearAir(); e.stopPropagation(); }
+});
+$('sugg').addEventListener('mousedown', e => { const li = e.target.closest('li'); if (li) { e.preventDefault(); pick(matches[+li.dataset.i]); } });
+addEventListener('keydown', e => {
+  if (e.target === $('q')) return;
+  if (e.key === '/') { $('q').focus(); e.preventDefault(); }
+  if (e.key === 'Escape') clearAir();
+  if (e.key === 'r' || e.key === 'R') $('replay').click();
+});
+
+// ---- race cards ------------------------------------------------------------
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const time = t => new Date(t).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+const OFFICES = ['ALL', 'SEN', 'GOV', 'HOUSE', 'OTHER', 'MEASURE', 'NOT CALLED'];
+let filter = 'ALL';
+try { filter = localStorage.getItem('fenix-filter') || 'ALL'; } catch (_) {}
+if (!OFFICES.includes(filter)) filter = 'ALL';
+const officeTag = r => r.kind === 'measure' ? 'MEASURE' : /SENATE/.test(r.office) ? 'SEN' : /GOVERNOR/.test(r.office) ? 'GOV' : /HOUSE/.test(r.office) ? 'HOUSE' : 'OTHER';
+const TAG_ORDER = { SEN: 0, GOV: 1, HOUSE: 2, OTHER: 3, MEASURE: 4 };
+const isM = r => r.kind === 'measure';
+// What a call says: "Dem" / "GOP" for races, "passes" / "fails" for ballot measures
+const callWord = (r, side) => isM(r) ? (side === 'dem' ? 'passes' : 'fails') : PARTY[side];
+// "19:30" -> "7:30 PM ET"; "24:00" -> "MIDNIGHT ET"
+const pollLabel = p => {
+  if (!p) return 'POLL TIME TBD';
+  let [h, m] = p.split(':').map(Number);
+  if (h >= 24) return 'MIDNIGHT ET';
+  return `${h % 12 || 12}${m ? ':' + String(m).padStart(2, '0') : ''} PM ET`;
+};
+// Minutes past midnight right now in Eastern time, to mark groups whose polls have closed.
+function nowET() {
+  const parts = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', hour: 'numeric', minute: 'numeric', hourCycle: 'h23' }).formatToParts(new Date());
+  const get = t => +parts.find(x => x.type === t).value;
+  return get('hour') * 60 + get('minute');
+}
+function drawFilters() {
+  $('filters').innerHTML = OFFICES.map(o => `<button data-filter="${o}" class="${filter === o ? 'on' : ''}">${o === 'ALL' ? 'All races' : o === 'NOT CALLED' ? 'Not called' : o === 'SEN' ? 'Senate' : o === 'GOV' ? 'Governor' : o === 'HOUSE' ? 'House' : o === 'MEASURE' ? 'Measures' : 'Other'}</button>`).join('');
+}
+$('filters').addEventListener('click', e => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  filter = b.dataset.filter;
+  try { localStorage.setItem('fenix-filter', filter); } catch (_) {}
+  drawFilters(); render();
+});
+drawFilters();
+setInterval(render, 60000);  // refresh the "polls closed" badges
+
+function card(r) {
+  const c = calls[r.slug];
+  const tag = officeTag(r);
+  const cand = side => `<button class="cand ${side} ${c ? (c.winner === side ? 'won' : 'lost') : ''}" data-slug="${r.slug}" data-side="${side}">${esc(r[side].name)}<small>${c && c.winner === side ? (isM(r) ? '✓ Projected to ' + (side === 'dem' ? 'pass' : 'fail') : '✓ Projected winner') : isM(r) ? esc(r[side].means) : PARTY[side]}</small></button>`;
+  return `<div class="card ${tag} ${live.slug === r.slug ? 'live' : ''} ${c ? 'done' : ''}">
+    <div class="top"><span class="otag ${tag}">${tag}</span><span class="state">${esc(r.state)}${isM(r) ? ' · ' + esc(r.office) : ''}</span><span class="held">${r.held ? PARTY[r.held] + ' seat' : ''}</span>
+      <button class="show" data-show="${r.slug}">Show</button></div>
+    <div class="cands">${cand('dem')}${cand('gop')}</div>
+    <div class="status">${c ? `Called ${time(c.at)}${isM(r) ? ' · ' + callWord(r, c.winner) : ''}${r.held ? ' · ' + PARTY[c.winner] + (r.held === c.winner ? ' hold' : ' FLIP') : ''}<a data-undo="${r.slug}">undo</a>` : 'Not called'}</div>
+  </div>`;
+}
+function render() {
+  const shown = RACES.filter(r => filter === 'ALL' ? true : filter === 'NOT CALLED' ? !calls[r.slug] : officeTag(r) === filter);
+  const groups = {};
+  for (const r of shown) (groups[r.polls || '99:99'] = groups[r.polls || '99:99'] || []).push(r);
+  const now = nowET();
+  $('grid').innerHTML = Object.keys(groups).sort().map(p => {
+    const list = groups[p].sort((a, b) => TAG_ORDER[officeTag(a)] - TAG_ORDER[officeTag(b)] || a.state.localeCompare(b.state));
+    const [h, m] = p.split(':').map(Number);
+    const closed = now >= h * 60 + m;
+    const called = list.filter(r => calls[r.slug]).length;
+    return `<div class="group"><h2>POLLS CLOSE ${pollLabel(p)}${closed ? '<span class="closed">CLOSED</span>' : ''}<span class="count">${called}/${list.length} called</span></h2>
+      <div class="grid">${list.map(card).join('')}</div></div>`;
+  }).join('') || '<div class="hint">Nothing here.</div>';
+  const r = RACES.find(x => x.slug === live.slug);
+  $('onair').innerHTML = 'On output: ' + (r ? `<b>${esc(r.state)}${isM(r) ? ' ' + esc(r.office) : ''}</b> ${live.winner ? '· ' + (isM(r) ? 'projected to ' + (live.winner === 'dem' ? 'pass' : 'fail') : esc(r[live.winner].name) + ' projected winner') : '· no winner shown'}` : '<b>nothing (standby)</b>');
+  const linked = outWin && !outWin.closed;
+  $('link').textContent = linked ? '● Output tab connected' : 'Output tab not open';
+  $('link').className = linked ? 'on' : '';
+}
+$('grid').addEventListener('click', e => {
+  const b = e.target.closest('button, a');
+  if (!b) return;
+  if (b.dataset.side) {
+    const c = calls[b.dataset.slug];
+    if (c && c.winner === b.dataset.side) putOnAir(b.dataset.slug, true);
+    else call(b.dataset.slug, b.dataset.side);
+  }
+  if (b.dataset.show) putOnAir(b.dataset.show, false);
+  if (b.dataset.undo) undo(b.dataset.undo);
+});
+render();
+$('q').focus();
+</script>
+</body>
+</html>
