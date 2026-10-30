@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fenix Race Watcher</title>
+<link rel="stylesheet" href="fonts.css">
+<script src="races.js"></script>
+<style>
+  :root {
+    --bg: #0b0f1e; --panel: #141a2e; --line: #262e4a; --text: #e8ecf6; --muted: #8b94b0;
+    --blue: #2a5fd6; --red: #d6222c; --ok: #2fbf71; --warn: #f0b429;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.4 system-ui, -apple-system, 'Segoe UI', sans-serif; }
+  header { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 14px 20px; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: var(--bg); z-index: 5; }
+  header h1 { font: 22px 'Inter Black', sans-serif; margin: 0 12px 0 0; letter-spacing: .03em; }
+  button { font: inherit; color: var(--text); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 8px 14px; cursor: pointer; }
+  button:hover { border-color: #4a5680; }
+  button.primary { background: var(--blue); border-color: var(--blue); font-weight: 600; }
+  button.stop { background: var(--red); border-color: var(--red); font-weight: 600; }
+  input[type=text], input[type=password] { font: inherit; color: var(--text); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; width: 340px; max-width: 100%; }
+  label { color: var(--muted); font-size: 14px; display: flex; align-items: center; gap: 6px; }
+  .spacer { flex: 1; }
+  #state { font-weight: 700; }
+  #state.on { color: var(--ok); }
+  #state.off { color: var(--muted); }
+  #state.bad { color: var(--red); }
+  #banner { display: none; margin: 16px 20px 0; padding: 12px 16px; border-radius: 10px; background: #3a1016; border: 1px solid var(--red); font-weight: 600; }
+  #banner.show { display: block; }
+  #practiceNote { display: none; margin: 16px 20px 0; padding: 10px 16px; border-radius: 10px; background: #3a2e0a; border: 1px solid var(--warn); }
+  #practiceNote.show { display: block; }
+
+  main { display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 20px; padding: 20px; }
+  @media (max-width: 1100px) { main { grid-template-columns: 1fr; } }
+  h2 { font: 14px 'Inter Bold', sans-serif; letter-spacing: .08em; color: var(--muted); margin: 0 0 10px; }
+  table { width: 100%; border-collapse: collapse; background: var(--panel); border-radius: 10px; overflow: hidden; }
+  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); font-size: 14px; vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .05em; }
+  tr.called td { background: #12301f; }
+  tr.uncovered td { color: var(--muted); }
+  td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 4px; background: var(--line); color: var(--muted); }
+  .tag.dem { background: var(--blue); color: #fff; }
+  .tag.gop { background: var(--red); color: #fff; }
+  .tag.call { background: var(--ok); color: #04150b; }
+  #log { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  #log li { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--ok); border-radius: 8px; padding: 10px 12px; font-size: 14px; white-space: pre-line; }
+  #log li.warn { border-left-color: var(--warn); }
+  #log li .t { color: var(--muted); font-size: 12px; }
+  #log li.flash { animation: flash 1.2s ease-out 3; }
+  @keyframes flash { 0% { background: #1f6b42; } 100% { background: var(--panel); } }
+  footer { padding: 0 20px 24px; color: var(--muted); font-size: 13px; }
+  footer a { color: var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <h1>RACE WATCHER</h1>
+  <button id="go" class="primary">Start watching</button>
+  <span id="state" class="off">Stopped</span>
+  <span class="spacer"></span>
+  <label>Slack link <input id="hook" type="password" placeholder="https://hooks.slack.com/services/…" autocomplete="off"></label>
+  <button id="testSlack">Send test to Slack</button>
+  <label><input id="sound" type="checkbox" checked> Sound</label>
+  <label><input id="practice" type="checkbox"> Practice mode</label>
+</header>
+<div id="banner"></div>
+<div id="practiceNote">Practice mode: civicAPI sends made-up numbers for every race, so you can see what alerts look like. Slack messages say PRACTICE. Turn it off before the show.</div>
+<main>
+  <section>
+    <h2>OUR RACES</h2>
+    <table>
+      <thead><tr><th>Race</th><th>Polls close (ET)</th><th>Reporting</th><th>Leading</th><th>Status</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </section>
+  <section>
+    <h2>ALERTS</h2>
+    <ul id="log"></ul>
+  </section>
+</main>
+<footer>Results data: <a href="https://civicapi.org" target="_blank" rel="noopener">civicAPI</a>. Races marked "Ciara only" aren't covered by civicAPI. Keep this in its own window (not a background tab) so it checks on time.</footer>
+
+<script>
+// civicAPI race ids for each board race. Some ballot questions are listed twice by civicAPI; we use whichever copy is counting.
+const WATCH = {
+  'ohio': [87527], 'iowa': [87151], 'texas': [87438], 'alaska': [86916], 'kansas': [87162],
+  'minnesota': [87229], 'new-hampshire': [87283], 'maine': [87188], 'michigan': [87214],
+  'north-carolina': [87346], 'florida': [87068], 'georgia': [87087], 'south-carolina': [87409],
+  'georgia-governor': [87088], 'florida-governor': [87069], 'michigan-governor': [87215],
+  'texas-governor': [55857], 'ohio-governor': [87365], 'tennessee-governor': [87476],
+  'wisconsin-governor': [87491], 'arizona-governor': [86928], 'nevada-governor': [87260],
+  'california-governor': [86952],
+  'tx-15': [87422], 'tx-23': [87428], 'pa-10': [87385], 'ny-17': [87319], 'oh-9': [87358],
+  'oh-7': [87356], 'nc-11': [87342], 'ky-6': [87173], 'fl-14': [87053], 'fl-25': [87064],
+  'va-1': [87461], 'va-2': [87462], 'va-5': [87465],
+  'tx-rrc': [87441], 'tx-comptroller': [44210],
+  'va-q1': [139733, 140000], 'va-q2': [139734, 140001], 'mo-a3': [87243], 'nv-q6': [157054],
+  'ca-p40': [150576],
+};
+const API = 'https://civicapi.org/api/v2/race/';
+const TICK_MS = 20000;              // how often we look for races that are due
+const EVERY_MS = 60000;             // uncalled races after polls close
+const CALLED_EVERY_MS = 5 * 60000;  // called races, in case a call is withdrawn
+const PRACTICE_EVERY_MS = 30000;
+const PARALLEL = 3;
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (_) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (_) {} },
+};
+
+const isM = r => r.kind === 'measure';
+// "19:30" (Eastern, election night) -> timestamp. Nov 3 2026 is after DST ends, so ET = UTC-5.
+const closesAt = r => { const [h, m] = (r.polls || '19:00').split(':').map(Number); return Date.UTC(2026, 10, 3, h + 5, m); };
+const pollLabel = p => { let [h, m] = p.split(':').map(Number); return h >= 24 ? 'Midnight' : `${h % 12 || 12}${m ? ':' + String(m).padStart(2, '0') : ''} PM`; };
+const raceName = r => `${r.state} ${r.office}`.replace(/\s+/g, ' ');
+const lastName = n => n.replace(/,? (jr\.?|sr\.?|ii|iii|iv)$/i, '').split(' ').pop();
+
+const races = RACES.slice().sort((a, b) => closesAt(a) - closesAt(b) || a.slug.localeCompare(b.slug));
+const st = {};  // slug -> { data, nextAt, checkedAt }
+for (const r of races) st[r.slug] = { data: null, nextAt: 0, checkedAt: 0 };
+
+let running = false, timer = null, busy = false, fails = 0, outageSent = false;
+let practice = false;
+let announced = store.get('watcher-announced', {});  // slug -> winner name, so a reload doesn't repeat calls
+let practiceAnnounced = {};
+const seen = () => practice ? practiceAnnounced : announced;
+
+// Which board side a civicAPI candidate is on.
+function sideOf(r, cand) {
+  if (isM(r)) return /^(yes|approved|for)\b/i.test(cand.name) ? 'dem' : /^(no|rejected|against)\b/i.test(cand.name) ? 'gop' : null;
+  const ln = lastName(cand.name).toLowerCase();
+  for (const s of ['dem', 'gop']) if (r[s] && lastName(r[s].name).toLowerCase() === ln) return s;
+  if (/^democ/i.test(cand.party)) return 'dem';
+  if (/^republic/i.test(cand.party)) return 'gop';
+  return null;
+}
+const pct = c => (c && c.percent != null ? c.percent.toFixed(1) + '%' : '');
+
+// ---- fetching ----------------------------------------------------------------
+async function fetchRace(r) {
+  const ids = WATCH[r.slug];
+  const got = [];
+  for (const id of ids) {
+    const res = await fetch(API + id + '?light=true' + (practice ? '&testdata=true' : ''), { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    got.push(await res.json());
+  }
+  // Duplicate listings: take the one with the most counted.
+  got.sort((a, b) => (b.percent_reporting || 0) - (a.percent_reporting || 0) ||
+    b.candidates.reduce((s, c) => s + (c.votes || 0), 0) - a.candidates.reduce((s, c) => s + (c.votes || 0), 0));
+  return got[0];
+}
+
+function due(r, now) {
+  if (!WATCH[r.slug]) return false;
+  const s = st[r.slug];
+  if (now < s.nextAt) return false;
+  if (practice) return true;
+  return now >= closesAt(r) - 5 * 60000;  // start 5 minutes before polls close
+}
+
+async function tick() {
+  if (!running || busy) return;
+  busy = true;
+  const now = Date.now();
+  const queue = races.filter(r => due(r, now));
+  const work = async () => {
+    while (running && queue.length) {
+      const r = queue.shift(), s = st[r.slug];
+      try {
+        const data = await fetchRace(r);
+        s.data = data; s.checkedAt = Date.now();
+        const winner = data.candidates.find(c => c.winner);
+        s.nextAt = Date.now() + (practice ? PRACTICE_EVERY_MS : winner ? CALLED_EVERY_MS : EVERY_MS);
+        check(r, data);
+        if (fails >= 3) recovered();
+        fails = 0;
+      } catch (e) {
+        s.nextAt = Date.now() + 30000;
+        if (++fails === 3) outage(e);
+      }
+    }
+  };
+  await Promise.all(Array.from({ length: PARALLEL }, work));
+  busy = false;
+  draw();
+}
+
+// ---- calls -------------------------------------------------------------------
+function check(r, data) {
+  const winner = data.candidates.find(c => c.winner);
+  const had = seen()[r.slug];
+  if (winner && had !== winner.name) {
+    if (practice && had) return;  // practice data reshuffles every time; one alert per race is enough
+    seen()[r.slug] = winner.name;
+    if (!practice) store.set('watcher-announced', announced);
+    announceCall(r, data, winner, had);
+  } else if (!winner && had && !practice) {
+    delete announced[r.slug];
+    store.set('watcher-announced', announced);
+    alertAll(`⚠️ CALL WITHDRAWN: ${raceName(r)}\ncivicAPI no longer shows ${had} as the winner. Hold the board until Ciara confirms.`, 'warn');
+  }
+}
+
+function announceCall(r, data, w, previous) {
+  const side = sideOf(r, w);
+  const others = data.candidates.filter(c => c !== w).sort((a, b) => (b.votes || 0) - (a.votes || 0));
+  const score = others[0] ? `${pct(w)} to ${pct(others[0])}` : pct(w);
+  const rep = data.percent_reporting != null ? ` with ${data.percent_reporting}% reporting` : '';
+  let head, board;
+  if (isM(r)) {
+    const passes = side === 'dem';
+    head = `${raceName(r)} ${passes ? 'PASSES' : 'FAILS'}`;
+    board = `Board: call ${r.state} ${r.office} as ${passes ? 'passing' : 'failing'}`;
+  } else {
+    const party = side === 'dem' ? ' (D)' : side === 'gop' ? ' (R)' : w.party ? ` (${w.party})` : '';
+    const flip = side && r.held ? (side === r.held ? `${r.held === 'dem' ? 'DEM' : 'GOP'} HOLD` : `${side === 'dem' ? 'DEM' : 'GOP'} FLIP`) : '';
+    head = `${w.name}${party} wins ${raceName(r)}${flip ? ' · ' + flip : ''}`;
+    board = side ? `Board: type "${lastName(r[side].name)}"` : 'Not one of the two board candidates. Check before calling it on air.';
+  }
+  const fix = previous ? `\n(Changed from ${previous}.)` : '';
+  alertAll(`🗳️ RACE CALL: ${head}\n${score}${rep}${fix}\n${board}`, 'call');
+}
+
+function outage(e) {
+  $('banner').textContent = `civicAPI isn't answering (${e.message}). Rely on Ciara until this clears.`;
+  $('banner').classList.add('show');
+  $('state').className = 'bad'; $('state').textContent = 'Connection problem';
+  if (!outageSent) { outageSent = true; alertAll('⚠️ Race watcher lost its results feed. Go with Ciara\'s calls until it reconnects.', 'warn'); }
+}
+function recovered() {
+  $('banner').classList.remove('show');
+  $('state').className = 'on'; $('state').textContent = practice ? 'Practicing' : 'Watching';
+  if (outageSent) { outageSent = false; alertAll('✅ Race watcher is back on its results feed.', 'warn'); }
+}
+
+// ---- output ------------------------------------------------------------------
+function alertAll(text, kind) {
+  if (practice) text = '[PRACTICE] ' + text;
+  const li = document.createElement('li');
+  li.className = (kind === 'warn' ? 'warn ' : '') + 'flash';
+  li.innerHTML = `<div class="t">${new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' })}</div>${esc(text)}`;
+  $('log').prepend(li);
+  if ($('sound').checked) chime(kind === 'warn' ? 330 : 880);
+  slack(text);
+}
+
+function slack(text) {
+  const url = $('hook').value.trim();
+  if (!/^https:\/\/hooks\.slack\.com\//.test(url)) return;
+  // Slack webhooks don't allow browser CORS, so send it as a simple form post (we can't read the reply).
+  fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'payload=' + encodeURIComponent(JSON.stringify({ text })) }).catch(() => {});
+}
+
+let ac;
+function chime(freq) {
+  try {
+    ac = ac || new AudioContext();
+    const t = ac.currentTime;
+    [0, 0.18].forEach((d, i) => {
+      const o = ac.createOscillator(), g = ac.createGain();
+      o.frequency.value = freq * (i ? 1.5 : 1);
+      g.gain.setValueAtTime(0.0001, t + d); g.gain.exponentialRampToValueAtTime(0.3, t + d + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + d + 0.5);
+      o.connect(g).connect(ac.destination); o.start(t + d); o.stop(t + d + 0.55);
+    });
+  } catch (_) {}
+}
+
+function draw() {
+  $('rows').innerHTML = races.map(r => {
+    const s = st[r.slug], d = s.data;
+    if (!WATCH[r.slug]) return `<tr class="uncovered"><td>${esc(raceName(r))}</td><td>${pollLabel(r.polls)}</td><td></td><td></td><td>Ciara only</td></tr>`;
+    let rep = '', lead = '', status = Date.now() < closesAt(r) - 5 * 60000 && !practice ? 'Waiting for polls' : 'Watching';
+    let called = false;
+    if (d) {
+      const cs = d.candidates.slice().sort((a, b) => (b.votes || 0) - (a.votes || 0));
+      const w = cs.find(c => c.winner);
+      rep = (d.percent_reporting || 0) + '%';
+      if (cs[0] && cs[0].votes) {
+        const side = sideOf(r, cs[0]);
+        lead = `<span class="tag ${side || ''}">${side === 'dem' ? (isM(r) ? 'YES' : 'D') : side === 'gop' ? (isM(r) ? 'NO' : 'R') : '?'}</span> ${esc(cs[0].name)} ${pct(cs[0])}`;
+      }
+      if (w) { called = true; status = `<span class="tag call">CALLED</span> ${esc(w.name)}`; }
+    }
+    return `<tr class="${called ? 'called' : ''}"><td>${esc(raceName(r))}</td><td>${pollLabel(r.polls)}</td><td class="num">${rep}</td><td>${lead}</td><td>${status}</td></tr>`;
+  }).join('');
+}
+
+// ---- controls ----------------------------------------------------------------
+function start() {
+  running = true; fails = 0;
+  $('go').textContent = 'Stop'; $('go').className = 'stop';
+  $('state').className = 'on'; $('state').textContent = practice ? 'Practicing' : 'Watching';
+  chime(660);  // also unlocks sound in the browser
+  tick(); timer = setInterval(tick, TICK_MS);
+}
+function stop() {
+  running = false; clearInterval(timer);
+  $('go').textContent = 'Start watching'; $('go').className = 'primary';
+  $('state').className = 'off'; $('state').textContent = 'Stopped';
+}
+$('go').onclick = () => running ? stop() : start();
+$('hook').value = store.get('watcher-hook', '');
+$('hook').onchange = () => store.set('watcher-hook', $('hook').value.trim());
+$('testSlack').onclick = () => {
+  if (!/^https:\/\/hooks\.slack\.com\//.test($('hook').value.trim())) { alert('Paste the Slack link first (it starts with https://hooks.slack.com/).'); return; }
+  slack('👋 Race watcher test: if you can read this, race calls will show up here on election night.');
+  $('testSlack').textContent = 'Sent. Check Slack';
+  setTimeout(() => $('testSlack').textContent = 'Send test to Slack', 4000);
+};
+$('practice').onchange = () => {
+  const wasRunning = running; stop();
+  practice = $('practice').checked; practiceAnnounced = {};
+  for (const r of races) st[r.slug] = { data: null, nextAt: 0, checkedAt: 0 };
+  $('practiceNote').classList.toggle('show', practice);
+  draw();
+  if (wasRunning) start();
+};
+draw();
+setInterval(draw, 30000);
+</script>
+</body>
+</html>
