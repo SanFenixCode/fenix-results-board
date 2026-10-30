@@ -511,6 +511,108 @@ window.RACES = [
   }
  },
  {
+  "slug": "ky-6",
+  "state": "KY-6",
+  "office": "U.S. HOUSE",
+  "held": "gop",
+  "polls": "18:00",
+  "dem": {
+   "name": "Zach Dembo",
+   "title": "Former Federal Prosecutor",
+   "means": ""
+  },
+  "gop": {
+   "name": "Ralph Alvarado",
+   "title": "Former State Senator",
+   "means": ""
+  }
+ },
+ {
+  "slug": "fl-14",
+  "state": "FL-14",
+  "office": "U.S. HOUSE",
+  "held": "dem",
+  "polls": "19:00",
+  "dem": {
+   "name": "Kathy Castor",
+   "title": "U.S. Representative",
+   "means": ""
+  },
+  "gop": {
+   "name": "Mike Beltran",
+   "title": "Former State Representative",
+   "means": ""
+  }
+ },
+ {
+  "slug": "fl-25",
+  "state": "FL-25",
+  "office": "U.S. HOUSE",
+  "held": "dem",
+  "polls": "19:00",
+  "dem": {
+   "name": "Jared Moskowitz",
+   "title": "U.S. Representative",
+   "means": ""
+  },
+  "gop": {
+   "name": "Scott Singer",
+   "title": "Former Boca Raton Mayor",
+   "means": ""
+  }
+ },
+ {
+  "slug": "va-1",
+  "state": "VA-1",
+  "office": "U.S. HOUSE",
+  "held": "gop",
+  "polls": "19:00",
+  "dem": {
+   "name": "Shannon Taylor",
+   "title": "Henrico Commonwealth's Attorney",
+   "means": ""
+  },
+  "gop": {
+   "name": "Rob Wittman",
+   "title": "U.S. Representative",
+   "means": ""
+  }
+ },
+ {
+  "slug": "va-2",
+  "state": "VA-2",
+  "office": "U.S. HOUSE",
+  "held": "gop",
+  "polls": "19:00",
+  "dem": {
+   "name": "Elaine Luria",
+   "title": "Former U.S. Representative",
+   "means": ""
+  },
+  "gop": {
+   "name": "Jen Kiggans",
+   "title": "U.S. Representative",
+   "means": ""
+  }
+ },
+ {
+  "slug": "va-5",
+  "state": "VA-5",
+  "office": "U.S. HOUSE",
+  "held": "gop",
+  "polls": "19:00",
+  "dem": {
+   "name": "Tom Perriello",
+   "title": "Former U.S. Representative",
+   "means": ""
+  },
+  "gop": {
+   "name": "John McGuire",
+   "title": "U.S. Representative",
+   "means": ""
+  }
+ },
+ {
   "slug": "madison-county",
   "state": "MADISON CO., IL",
   "office": "COUNTY BOARD \u00b7 DISTRICT 21",
