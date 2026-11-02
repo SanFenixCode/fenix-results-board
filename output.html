@@ -207,7 +207,7 @@ async function show(slug, winner, animate) {
 
   for (const side of ['dem', 'gop']) {
     const p = $('.plate.' + side);
-    p.querySelector('.tag').textContent = measure ? (side === 'dem' ? 'A YES VOTE MEANS' : 'A NO VOTE MEANS') : (side === 'dem' ? 'DEMOCRAT' : 'REPUBLICAN');
+    p.querySelector('.tag').textContent = measure ? (side === 'dem' ? 'A YES VOTE MEANS' : 'A NO VOTE MEANS') : (race[side].party || (side === 'dem' ? 'DEMOCRAT' : 'REPUBLICAN'));
     p.querySelector('.name').textContent = (race[side].means || race[side].name).toUpperCase();
     fit(p.querySelector('.name'), 66, 700);
     const t = p.querySelector('.title');
@@ -225,7 +225,7 @@ async function show(slug, winner, animate) {
     const tag = $('#result-tag');
     tag.className = winner;
     tag.style.left = barX(243) + 'px';
-    const party = winner === 'dem' ? 'DEM' : 'GOP';
+    const party = race[winner].party ? race[winner].party.slice(0, 3) : winner === 'dem' ? 'DEM' : 'GOP';
     tag.textContent = race.held ? `${party} ${race.held === winner ? 'HOLD' : 'FLIP'}` : `${party} WIN`;
   }
 
