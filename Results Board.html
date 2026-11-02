@@ -193,7 +193,7 @@ function search(q) {
 }
 function drawSugg() {
   $('sugg').innerHTML = matches.map((m, i) => m.kind === 'cand'
-    ? `<li data-i="${i}" class="${i === sel ? 'sel' : ''}"><span class="dot ${m.side}"></span>Call <b>${m.race.state}</b> for <b>${m.race[m.side].name}</b><span class="what">${PARTY[m.side]} wins · Enter</span></li>`
+    ? `<li data-i="${i}" class="${i === sel ? 'sel' : ''}"><span class="dot ${m.side}"></span>Call <b>${m.race.state}</b> for <b>${m.race[m.side].name}</b><span class="what">${partyOf(m.race, m.side)} wins · Enter</span></li>`
     : `<li data-i="${i}" class="${i === sel ? 'sel' : ''}"><span class="dot race"></span>Show <b>${m.race.state}${isM(m.race) ? ' ' + m.race.office : ''}</b> ${calls[m.race.slug] ? '(as called)' : '(no winner yet)'}<span class="what">Enter</span></li>`).join('');
 }
 function pick(m) {
@@ -228,7 +228,8 @@ const officeTag = r => r.kind === 'measure' ? 'MEASURE' : /SENATE/.test(r.office
 const TAG_ORDER = { SEN: 0, GOV: 1, HOUSE: 2, OTHER: 3, MEASURE: 4 };
 const isM = r => r.kind === 'measure';
 // What a call says: "Dem" / "GOP" for races, "passes" / "fails" for ballot measures
-const callWord = (r, side) => isM(r) ? (side === 'dem' ? 'passes' : 'fails') : PARTY[side];
+const partyOf = (r, side) => r[side] && r[side].party ? r[side].party[0] + r[side].party.slice(1, 3).toLowerCase() : PARTY[side];
+const callWord = (r, side) => isM(r) ? (side === 'dem' ? 'passes' : 'fails') : partyOf(r, side);
 // "19:30" -> "7:30 PM ET"; "24:00" -> "MIDNIGHT ET"
 const pollLabel = p => {
   if (!p) return 'POLL TIME TBD';
@@ -258,12 +259,12 @@ setInterval(render, 60000);  // refresh the "polls closed" badges
 function card(r) {
   const c = calls[r.slug];
   const tag = officeTag(r);
-  const cand = side => `<button class="cand ${side} ${c ? (c.winner === side ? 'won' : 'lost') : ''}" data-slug="${r.slug}" data-side="${side}">${esc(r[side].name)}<small>${c && c.winner === side ? (isM(r) ? '✓ Projected to ' + (side === 'dem' ? 'pass' : 'fail') : '✓ Projected winner') : isM(r) ? esc(r[side].means) : PARTY[side]}</small></button>`;
+  const cand = side => `<button class="cand ${side} ${c ? (c.winner === side ? 'won' : 'lost') : ''}" data-slug="${r.slug}" data-side="${side}">${esc(r[side].name)}<small>${c && c.winner === side ? (isM(r) ? '✓ Projected to ' + (side === 'dem' ? 'pass' : 'fail') : '✓ Projected winner') : isM(r) ? esc(r[side].means) : partyOf(r, side)}</small></button>`;
   return `<div class="card ${tag} ${live.slug === r.slug ? 'live' : ''} ${c ? 'done' : ''}">
     <div class="top"><span class="otag ${tag}">${tag}</span><span class="state">${esc(r.state)}${isM(r) ? ' · ' + esc(r.office) : ''}</span><span class="held">${r.held ? PARTY[r.held] + ' seat' : ''}</span>
       <button class="show" data-show="${r.slug}">Show</button></div>
     <div class="cands">${cand('dem')}${cand('gop')}</div>
-    <div class="status">${c ? `Called ${time(c.at)}${isM(r) ? ' · ' + callWord(r, c.winner) : ''}${r.held ? ' · ' + PARTY[c.winner] + (r.held === c.winner ? ' hold' : ' FLIP') : ''}<a data-undo="${r.slug}">undo</a>` : 'Not called'}</div>
+    <div class="status">${c ? `Called ${time(c.at)}${isM(r) ? ' · ' + callWord(r, c.winner) : ''}${r.held ? ' · ' + partyOf(r, c.winner) + (r.held === c.winner ? ' hold' : ' FLIP') : ''}<a data-undo="${r.slug}">undo</a>` : 'Not called'}</div>
   </div>`;
 }
 function render() {
