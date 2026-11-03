@@ -9,12 +9,14 @@ window.RACES = [
   "dem": {
    "name": "Sherrod Brown",
    "title": "Former U.S. Senator",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Jon Husted",
    "title": "U.S. Senator",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -26,12 +28,14 @@ window.RACES = [
   "dem": {
    "name": "Josh Turek",
    "title": "State Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Ashley Hinson",
    "title": "U.S. Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -43,12 +47,14 @@ window.RACES = [
   "dem": {
    "name": "James Talarico",
    "title": "State Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Ken Paxton",
    "title": "Attorney General",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -60,12 +66,14 @@ window.RACES = [
   "dem": {
    "name": "Mary Peltola",
    "title": "Former U.S. Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Dan Sullivan",
    "title": "U.S. Senator",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -77,12 +85,14 @@ window.RACES = [
   "dem": {
    "name": "Adam Hamilton",
    "title": "Pastor",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Roger Marshall",
    "title": "U.S. Senator",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -94,12 +104,14 @@ window.RACES = [
   "dem": {
    "name": "Peggy Flanagan",
    "title": "Lieutenant Governor",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Michele Tafoya",
    "title": "Former Sportscaster",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -111,12 +123,14 @@ window.RACES = [
   "dem": {
    "name": "Chris Pappas",
    "title": "U.S. Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "John E. Sununu",
    "title": "Former U.S. Senator",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -128,12 +142,14 @@ window.RACES = [
   "dem": {
    "name": "Troy Jackson",
    "title": "Former State Senate President",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Susan Collins",
    "title": "U.S. Senator",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -145,12 +161,14 @@ window.RACES = [
   "dem": {
    "name": "Abdul El-Sayed",
    "title": "Physician",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Mike Rogers",
    "title": "Former U.S. Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -162,12 +180,14 @@ window.RACES = [
   "dem": {
    "name": "Roy Cooper",
    "title": "Former Governor",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Michael Whatley",
    "title": "Former RNC Chair",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -179,12 +199,14 @@ window.RACES = [
   "dem": {
    "name": "Angie Nixon",
    "title": "State Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Ashley Moody",
    "title": "U.S. Senator",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -196,12 +218,14 @@ window.RACES = [
   "dem": {
    "name": "Jon Ossoff",
    "title": "U.S. Senator",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Mike Collins",
    "title": "U.S. Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -213,12 +237,14 @@ window.RACES = [
   "dem": {
    "name": "Keisha Lance Bottoms",
    "title": "Former Atlanta Mayor",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Rick Jackson",
    "title": "Businessman",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -230,12 +256,14 @@ window.RACES = [
   "dem": {
    "name": "David Jolly",
    "title": "Former U.S. Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Byron Donalds",
    "title": "U.S. Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -247,12 +275,14 @@ window.RACES = [
   "dem": {
    "name": "Jocelyn Benson",
    "title": "Secretary of State",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "John James",
    "title": "U.S. Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -264,12 +294,14 @@ window.RACES = [
   "dem": {
    "name": "Gina Hinojosa",
    "title": "State Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Greg Abbott",
    "title": "Governor",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -281,12 +313,14 @@ window.RACES = [
   "dem": {
    "name": "Amy Acton",
    "title": "Former State Health Director",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Vivek Ramaswamy",
    "title": "Businessman",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -298,12 +332,14 @@ window.RACES = [
   "dem": {
    "name": "Jerri Green",
    "title": "State Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Marsha Blackburn",
    "title": "U.S. Senator",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -315,12 +351,14 @@ window.RACES = [
   "dem": {
    "name": "David Crowley",
    "title": "Milwaukee County Executive",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Tom Tiffany",
    "title": "U.S. Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -332,12 +370,14 @@ window.RACES = [
   "dem": {
    "name": "Katie Hobbs",
    "title": "Governor",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Andy Biggs",
    "title": "U.S. Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -349,12 +389,14 @@ window.RACES = [
   "dem": {
    "name": "Aaron Ford",
    "title": "Attorney General",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Joe Lombardo",
    "title": "Governor",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -366,12 +408,14 @@ window.RACES = [
   "dem": {
    "name": "Xavier Becerra",
    "title": "Former HHS Secretary",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Steve Hilton",
    "title": "Former Fox News Host",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -383,12 +427,14 @@ window.RACES = [
   "dem": {
    "name": "Annie Andrews",
    "title": "Pediatrician",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Darline Graham",
    "title": "U.S. Senator",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -400,12 +446,14 @@ window.RACES = [
   "dem": {
    "name": "Bobby Pulido",
    "title": "Tejano Singer",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Monica De La Cruz",
    "title": "U.S. Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -417,12 +465,14 @@ window.RACES = [
   "dem": {
    "name": "Katy Padilla Stout",
    "title": "",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Brandon Herrera",
    "title": "YouTuber",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -434,12 +484,14 @@ window.RACES = [
   "dem": {
    "name": "Janelle Stelson",
    "title": "Former TV Anchor",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Scott Perry",
    "title": "U.S. Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -451,12 +503,14 @@ window.RACES = [
   "dem": {
    "name": "Cait Conley",
    "title": "Army Veteran",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Mike Lawler",
    "title": "U.S. Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -468,12 +522,14 @@ window.RACES = [
   "dem": {
    "name": "Marcy Kaptur",
    "title": "U.S. Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Derek Merrin",
    "title": "Former State Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -485,12 +541,14 @@ window.RACES = [
   "dem": {
    "name": "Brian Poindexter",
    "title": "",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Max Miller",
    "title": "U.S. Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -502,12 +560,14 @@ window.RACES = [
   "dem": {
    "name": "Jamie Ager",
    "title": "",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Jennifer Balkcom",
    "title": "State Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -519,12 +579,14 @@ window.RACES = [
   "dem": {
    "name": "Zach Dembo",
    "title": "Former Federal Prosecutor",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Ralph Alvarado",
    "title": "Former State Senator",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -536,12 +598,14 @@ window.RACES = [
   "dem": {
    "name": "Kathy Castor",
    "title": "U.S. Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Mike Beltran",
    "title": "Former State Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -553,12 +617,14 @@ window.RACES = [
   "dem": {
    "name": "Jared Moskowitz",
    "title": "U.S. Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Scott Singer",
    "title": "Former Boca Raton Mayor",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -570,12 +636,14 @@ window.RACES = [
   "dem": {
    "name": "Shannon Taylor",
    "title": "Henrico Commonwealth's Attorney",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Rob Wittman",
    "title": "U.S. Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -587,12 +655,14 @@ window.RACES = [
   "dem": {
    "name": "Elaine Luria",
    "title": "Former U.S. Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Jen Kiggans",
    "title": "U.S. Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -604,12 +674,14 @@ window.RACES = [
   "dem": {
    "name": "Tom Perriello",
    "title": "Former U.S. Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "John McGuire",
    "title": "U.S. Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -621,12 +693,14 @@ window.RACES = [
   "dem": {
    "name": "Jeremy Haston",
    "title": "Fenix News Correspondent",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "John Eric Foster",
    "title": "",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -638,12 +712,14 @@ window.RACES = [
   "dem": {
    "name": "Jaime West",
    "title": "",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Gary Keener Jr.",
    "title": "",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -655,12 +731,14 @@ window.RACES = [
   "dem": {
    "name": "Jon Rosenthal",
    "title": "State Representative",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Bo French",
    "title": "Former Tarrant Co. GOP Chair",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -672,12 +750,14 @@ window.RACES = [
   "dem": {
    "name": "Sarah Eckhardt",
    "title": "State Senator",
-   "means": ""
+   "means": "",
+   "party": ""
   },
   "gop": {
    "name": "Don Huffines",
    "title": "Texas Comptroller",
-   "means": ""
+   "means": "",
+   "party": ""
   }
  },
  {
@@ -689,12 +769,14 @@ window.RACES = [
   "dem": {
    "name": "Yes",
    "title": "",
-   "means": "Protect abortion rights"
+   "means": "Protect abortion rights",
+   "party": ""
   },
   "gop": {
    "name": "No",
    "title": "",
-   "means": "No new protections"
+   "means": "No new protections",
+   "party": ""
   },
   "kind": "measure",
   "summary": "Right to reproductive freedom"
@@ -708,12 +790,14 @@ window.RACES = [
   "dem": {
    "name": "Yes",
    "title": "",
-   "means": "Remove the ban"
+   "means": "Remove the ban",
+   "party": ""
   },
   "gop": {
    "name": "No",
    "title": "",
-   "means": "Keep the ban"
+   "means": "Keep the ban",
+   "party": ""
   },
   "kind": "measure",
   "summary": "Remove the same-sex marriage ban"
@@ -727,12 +811,14 @@ window.RACES = [
   "dem": {
    "name": "Yes",
    "title": "",
-   "means": "End legal weed sales"
+   "means": "End legal weed sales",
+   "party": ""
   },
   "gop": {
    "name": "No",
    "title": "",
-   "means": "Keep legal weed"
+   "means": "Keep legal weed",
+   "party": ""
   },
   "kind": "measure",
   "summary": "End recreational marijuana sales"
@@ -746,12 +832,14 @@ window.RACES = [
   "dem": {
    "name": "Yes",
    "title": "",
-   "means": "Repeal abortion rights"
+   "means": "Repeal abortion rights",
+   "party": ""
   },
   "gop": {
    "name": "No",
    "title": "",
-   "means": "Keep abortion rights"
+   "means": "Keep abortion rights",
+   "party": ""
   },
   "kind": "measure",
   "summary": "Repeal the 2024 abortion-rights amendment"
@@ -765,12 +853,14 @@ window.RACES = [
   "dem": {
    "name": "Yes",
    "title": "",
-   "means": "Protect abortion rights"
+   "means": "Protect abortion rights",
+   "party": ""
   },
   "gop": {
    "name": "No",
    "title": "",
-   "means": "No new protections"
+   "means": "No new protections",
+   "party": ""
   },
   "kind": "measure",
   "summary": "Right to abortion (second required vote)"
@@ -784,12 +874,14 @@ window.RACES = [
   "dem": {
    "name": "Yes",
    "title": "",
-   "means": "Restore abortion access"
+   "means": "Restore abortion access",
+   "party": ""
   },
   "gop": {
    "name": "No",
    "title": "",
-   "means": "Keep current ban"
+   "means": "Keep current ban",
+   "party": ""
   },
   "kind": "measure",
   "summary": "Reproductive Freedom and Privacy Act"
@@ -803,12 +895,14 @@ window.RACES = [
   "dem": {
    "name": "Yes",
    "title": "",
-   "means": "Tax billionaires"
+   "means": "Tax billionaires",
+   "party": ""
   },
   "gop": {
    "name": "No",
    "title": "",
-   "means": "No new tax"
+   "means": "No new tax",
+   "party": ""
   },
   "kind": "measure",
   "summary": "One-time 5% tax on billionaires"
@@ -822,14 +916,320 @@ window.RACES = [
   "dem": {
    "name": "Yes",
    "title": "",
-   "means": "Repeal ranked choice"
+   "means": "Repeal ranked choice",
+   "party": ""
   },
   "gop": {
    "name": "No",
    "title": "",
-   "means": "Keep ranked choice"
+   "means": "Keep ranked choice",
+   "party": ""
   },
   "kind": "measure",
   "summary": "Repeal open primaries and ranked-choice voting"
+ },
+ {
+  "slug": "in-5",
+  "state": "IN-5",
+  "office": "U.S. HOUSE",
+  "held": "gop",
+  "polls": "18:00",
+  "dem": {
+   "name": "J.D. Ford",
+   "title": "Former State Senator",
+   "means": "",
+   "party": ""
+  },
+  "gop": {
+   "name": "Victoria Spartz",
+   "title": "U.S. Representative",
+   "means": "",
+   "party": ""
+  }
+ },
+ {
+  "slug": "fl-27",
+  "state": "FL-27",
+  "office": "U.S. HOUSE",
+  "held": "gop",
+  "polls": "19:00",
+  "dem": {
+   "name": "Eliott Rodriguez",
+   "title": "Former TV News Anchor",
+   "means": "",
+   "party": ""
+  },
+  "gop": {
+   "name": "Mar\u00eda Elvira Salazar",
+   "title": "U.S. Representative",
+   "means": "",
+   "party": ""
+  }
+ },
+ {
+  "slug": "nc-1",
+  "state": "NC-1",
+  "office": "U.S. HOUSE",
+  "held": "dem",
+  "polls": "19:30",
+  "dem": {
+   "name": "Don Davis",
+   "title": "U.S. Representative",
+   "means": "",
+   "party": ""
+  },
+  "gop": {
+   "name": "Laurie Buckhout",
+   "title": "Businesswoman, Army Veteran",
+   "means": "",
+   "party": ""
+  }
+ },
+ {
+  "slug": "mississippi",
+  "state": "MISSISSIPPI",
+  "office": "U.S. SENATE",
+  "held": "gop",
+  "polls": "20:00",
+  "dem": {
+   "name": "Scott Colom",
+   "title": "District Attorney",
+   "means": "",
+   "party": ""
+  },
+  "gop": {
+   "name": "Cindy Hyde-Smith",
+   "title": "U.S. Senator",
+   "means": "",
+   "party": ""
+  }
+ },
+ {
+  "slug": "pa-1",
+  "state": "PA-1",
+  "office": "U.S. HOUSE",
+  "held": "gop",
+  "polls": "20:00",
+  "dem": {
+   "name": "Bob Harvie",
+   "title": "Bucks Co. Commissioner",
+   "means": "",
+   "party": ""
+  },
+  "gop": {
+   "name": "Brian Fitzpatrick",
+   "title": "U.S. Representative",
+   "means": "",
+   "party": ""
+  }
+ },
+ {
+  "slug": "pa-7",
+  "state": "PA-7",
+  "office": "U.S. HOUSE",
+  "held": "gop",
+  "polls": "20:00",
+  "dem": {
+   "name": "Bob Brooks",
+   "title": "Firefighter, Union Leader",
+   "means": "",
+   "party": ""
+  },
+  "gop": {
+   "name": "Ryan Mackenzie",
+   "title": "U.S. Representative",
+   "means": "",
+   "party": ""
+  }
+ },
+ {
+  "slug": "pa-8",
+  "state": "PA-8",
+  "office": "U.S. HOUSE",
+  "held": "gop",
+  "polls": "20:00",
+  "dem": {
+   "name": "Paige Cognetti",
+   "title": "Mayor of Scranton",
+   "means": "",
+   "party": ""
+  },
+  "gop": {
+   "name": "Rob Bresnahan",
+   "title": "U.S. Representative",
+   "means": "",
+   "party": ""
+  }
+ },
+ {
+  "slug": "me-2",
+  "state": "ME-2",
+  "office": "U.S. HOUSE",
+  "held": "dem",
+  "polls": "20:00",
+  "dem": {
+   "name": "Matt Dunlap",
+   "title": "Former Secretary of State",
+   "means": "",
+   "party": ""
+  },
+  "gop": {
+   "name": "Paul LePage",
+   "title": "Former Governor",
+   "means": "",
+   "party": ""
+  }
+ },
+ {
+  "slug": "nj-7",
+  "state": "NJ-7",
+  "office": "U.S. HOUSE",
+  "held": "gop",
+  "polls": "20:00",
+  "dem": {
+   "name": "Rebecca Bennett",
+   "title": "Former Navy Pilot",
+   "means": "",
+   "party": ""
+  },
+  "gop": {
+   "name": "Tom Kean Jr.",
+   "title": "U.S. Representative",
+   "means": "",
+   "party": ""
+  }
+ },
+ {
+  "slug": "tn-9",
+  "state": "TN-9",
+  "office": "U.S. HOUSE",
+  "held": "dem",
+  "polls": "20:00",
+  "dem": {
+   "name": "Justin Pearson",
+   "title": "State Representative",
+   "means": "",
+   "party": ""
+  },
+  "gop": {
+   "name": "Brent Taylor",
+   "title": "State Senator",
+   "means": "",
+   "party": ""
+  }
+ },
+ {
+  "slug": "louisiana",
+  "state": "LOUISIANA",
+  "office": "U.S. SENATE",
+  "held": "gop",
+  "polls": "21:00",
+  "dem": {
+   "name": "Jamie Davis",
+   "title": "Farmer",
+   "means": "",
+   "party": ""
+  },
+  "gop": {
+   "name": "Julia Letlow",
+   "title": "U.S. Representative",
+   "means": "",
+   "party": ""
+  }
+ },
+ {
+  "slug": "nebraska",
+  "state": "NEBRASKA",
+  "office": "U.S. SENATE",
+  "held": "gop",
+  "polls": "21:00",
+  "dem": {
+   "name": "Dan Osborn",
+   "title": "Union Leader, Mechanic",
+   "means": "",
+   "party": "INDEPENDENT"
+  },
+  "gop": {
+   "name": "Pete Ricketts",
+   "title": "U.S. Senator",
+   "means": "",
+   "party": ""
+  }
+ },
+ {
+  "slug": "iowa-governor",
+  "state": "IOWA",
+  "office": "GOVERNOR",
+  "held": "gop",
+  "polls": "21:00",
+  "dem": {
+   "name": "Rob Sand",
+   "title": "State Auditor",
+   "means": "",
+   "party": ""
+  },
+  "gop": {
+   "name": "Zach Lahn",
+   "title": "Farmer, Businessman",
+   "means": "",
+   "party": ""
+  }
+ },
+ {
+  "slug": "new-york-governor",
+  "state": "NEW YORK",
+  "office": "GOVERNOR",
+  "held": "dem",
+  "polls": "21:00",
+  "dem": {
+   "name": "Kathy Hochul",
+   "title": "Governor",
+   "means": "",
+   "party": ""
+  },
+  "gop": {
+   "name": "Bruce Blakeman",
+   "title": "Nassau County Executive",
+   "means": "",
+   "party": ""
+  }
+ },
+ {
+  "slug": "ny-21",
+  "state": "NY-21",
+  "office": "U.S. HOUSE",
+  "held": "gop",
+  "polls": "21:00",
+  "dem": {
+   "name": "Blake Gendebien",
+   "title": "Dairy Farmer",
+   "means": "",
+   "party": ""
+  },
+  "gop": {
+   "name": "Anthony Constantino",
+   "title": "Sticker Mule CEO",
+   "means": "",
+   "party": ""
+  }
+ },
+ {
+  "slug": "az-1",
+  "state": "AZ-1",
+  "office": "U.S. HOUSE",
+  "held": "gop",
+  "polls": "21:00",
+  "dem": {
+   "name": "Amish Shah",
+   "title": "ER Doctor, Former State Rep.",
+   "means": "",
+   "party": ""
+  },
+  "gop": {
+   "name": "Jay Feely",
+   "title": "Former NFL Kicker",
+   "means": "",
+   "party": ""
+  }
  }
 ];

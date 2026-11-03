@@ -98,6 +98,10 @@ const WATCH = {
   'tx-rrc': [87441], 'tx-comptroller': [44210],
   'va-q1': [139733, 140000], 'va-q2': [139734, 140001], 'mo-a3': [87243], 'nv-q6': [157054],
   'ca-p40': [150576],
+  'in-5': [87139], 'fl-27': [87066], 'nc-1': [87332], 'mississippi': [81004], 'pa-1': [87376],
+  'pa-7': [87382], 'pa-8': [87383], 'me-2': [87187], 'nj-7': [87296], 'tn-9': [87456],
+  'louisiana': [87183], 'nebraska': [87254], 'iowa-governor': [87152], 'new-york-governor': [87329],
+  'ny-21': [87323], 'az-1': [86917],
 };
 const API = 'https://civicapi.org/api/v2/race/';
 const TICK_MS = 20000;              // how often we look for races that are due
@@ -218,8 +222,9 @@ function announceCall(r, data, w, previous) {
     head = `${raceName(r)} ${passes ? 'PASSES' : 'FAILS'}`;
     board = `Board: call ${r.state} ${r.office} as ${passes ? 'passing' : 'failing'}`;
   } else {
-    const party = side === 'dem' ? ' (D)' : side === 'gop' ? ' (R)' : w.party ? ` (${w.party})` : '';
-    const flip = side && r.held ? (side === r.held ? `${r.held === 'dem' ? 'DEM' : 'GOP'} HOLD` : `${side === 'dem' ? 'DEM' : 'GOP'} FLIP`) : '';
+    const tag = sd => r[sd].party ? r[sd].party.slice(0, 3) : sd === 'dem' ? 'DEM' : 'GOP';  // e.g. an independent on the Dem side
+    const party = side && r[side].party ? ` (${r[side].party[0]})` : side === 'dem' ? ' (D)' : side === 'gop' ? ' (R)' : w.party ? ` (${w.party})` : '';
+    const flip = side && r.held ? (side === r.held ? `${tag(side)} HOLD` : `${tag(side)} FLIP`) : '';
     head = `${w.name}${party} wins ${raceName(r)}${flip ? ' · ' + flip : ''}`;
     board = side ? `Board: type "${lastName(r[side].name)}"` : 'Not one of the two board candidates. Check before calling it on air.';
   }
