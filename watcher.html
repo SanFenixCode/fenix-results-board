@@ -108,7 +108,9 @@ const TICK_MS = 20000;              // how often we look for races that are due
 const EVERY_MS = 60000;             // uncalled races after polls close
 const CALLED_EVERY_MS = 5 * 60000;  // called races, in case a call is withdrawn
 const PRACTICE_EVERY_MS = 30000;
-const PARALLEL = 3;
+const PARALLEL = 2;
+const OUTAGE_AFTER_MS = 3 * 60000;     // only call it an outage after 3 minutes with no good answer
+const OUTAGE_SLACK_EVERY_MS = 20 * 60000;  // and say so in Slack at most this often
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -128,7 +130,8 @@ const races = RACES.slice().sort((a, b) => closesAt(a) - closesAt(b) || a.slug.l
 const st = {};  // slug -> { data, nextAt, checkedAt }
 for (const r of races) st[r.slug] = { data: null, nextAt: 0, checkedAt: 0 };
 
-let running = false, timer = null, busy = false, fails = 0, outageSent = false;
+let running = false, timer = null, busy = false, outageSent = false;
+let lastOkAt = 0, lastErr = null, backoff = 0, pauseUntil = 0, lastOutageSlackAt = 0;
 let practice = false;
 let announced = store.get('watcher-announced', {});  // slug -> winner name, so a reload doesn't repeat calls
 let practiceAnnounced = {}, practiceSent = 0;  // practice only sends the first few calls to Slack, not all of them
@@ -170,8 +173,10 @@ function due(r, now) {
 
 async function tick() {
   if (!running || busy) return;
-  busy = true;
   const now = Date.now();
+  if (lastErr && now - lastOkAt > OUTAGE_AFTER_MS) outage(lastErr);
+  if (now < pauseUntil) return;  // civicAPI is struggling; give it room instead of piling on
+  busy = true;
   const queue = races.filter(r => due(r, now));
   const work = async () => {
     while (running && queue.length) {
@@ -182,11 +187,15 @@ async function tick() {
         const winner = data.candidates.find(c => c.winner);
         s.nextAt = Date.now() + (practice ? PRACTICE_EVERY_MS : winner ? CALLED_EVERY_MS : EVERY_MS);
         check(r, data);
-        if (fails >= 3) recovered();
-        fails = 0;
+        lastOkAt = Date.now(); lastErr = null; backoff = 0;
+        if (outageSent || $('banner').classList.contains('show')) recovered();
       } catch (e) {
-        s.nextAt = Date.now() + 30000;
-        if (++fails === 3) outage(e);
+        // Busy or erroring: stop this round and back off (30s, 1m, 2m, up to 5m) so we don't hammer it.
+        lastErr = e;
+        s.nextAt = Date.now() + 60000;
+        backoff = Math.min(backoff ? backoff * 2 : 30000, 5 * 60000);
+        pauseUntil = Date.now() + backoff;
+        queue.length = 0;
       }
     }
   };
@@ -236,7 +245,10 @@ function outage(e) {
   $('banner').textContent = `civicAPI isn't answering (${e.message}). Rely on Ciara until this clears.`;
   $('banner').classList.add('show');
   $('state').className = 'bad'; $('state').textContent = 'Connection problem';
-  if (!outageSent) { outageSent = true; alertAll('⚠️ Race watcher lost its results feed. Go with Ciara\'s calls until it reconnects.', 'warn'); }
+  if (!outageSent && Date.now() - lastOutageSlackAt > OUTAGE_SLACK_EVERY_MS) {
+    outageSent = true; lastOutageSlackAt = Date.now();
+    alertAll('⚠️ Race watcher lost its results feed. Go with Ciara\'s calls until it reconnects.', 'warn');
+  }
 }
 function recovered() {
   $('banner').classList.remove('show');
@@ -299,7 +311,7 @@ function draw() {
 
 // ---- controls ----------------------------------------------------------------
 function start() {
-  running = true; fails = 0;
+  running = true; lastOkAt = Date.now(); lastErr = null; backoff = 0; pauseUntil = 0;
   $('go').textContent = 'Stop'; $('go').className = 'stop';
   $('state').className = 'on'; $('state').textContent = practice ? 'Practicing' : 'Watching';
   chime(660);  // also unlocks sound in the browser
